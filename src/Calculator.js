@@ -25,82 +25,10 @@ class Calculator extends Component{
     }
    
     calculate() {
-        const op=this.state.operation
-        let tmpresult
-        let firstTime=true//the first time tmpresult is assigned
-        let b0=true
-        let lastSliceInd=0//Next Index of the Operator
-        let prevOpInd=0//Previous Index of the Operator
-        for(let i=0;i<this.state.operation.length;i++){
-                if((i===op.length-1||op[i]==='+'||op[i]==='-'||op[i]==='*'||op[i]==='/') && firstTime){
-                        lastSliceInd=i+1
-                        if(i!==op.length-1){
-                            lastSliceInd=i
-                        }
-                        tmpresult=Number(op.slice(0,lastSliceInd).join(''))
-                        firstTime=false
-                        prevOpInd=i
-                }
-                if((!firstTime && (op[i]==='+'||op[i]==='-'||op[i]==='*'|| op[i]==='/'))||i===op.length-1)  {
-                    lastSliceInd=i+1
-                    if(i!==op.length-1){
-                        lastSliceInd=i
-                    }
-                  
-                    console.log("a="+tmpresult)  
-                    switch(op[prevOpInd]){
-                        case '+':{
-                            tmpresult+=Number(op.slice(prevOpInd+1,lastSliceInd).join(''))
-                            break
-                        }
-
-                        case '-':{
-                            tmpresult-=Number(op.slice(prevOpInd+1,lastSliceInd).join(''))
-                            break
-                        }
-
-                        case '*':{
-                            //at the first time b===0 and it may cause a bug to the division and multiplication
-                            if(op[i]==='*' && b0===true){
-                                b0=false
-                                break
-                            }
-                            tmpresult*=Number(op.slice(prevOpInd+1,lastSliceInd).join(''))
-                            break
-                        }
-
-                        case '/':{
-                              //at the first time b===0 and it may cause a bug to the division and multiplication
-                              if(op[i]==='/' && b0===true){
-                                b0=false
-                                break
-                              }
-                            
-                            tmpresult/=Number(op.slice(prevOpInd+1,lastSliceInd).join(''))
-                            break
-                        }
-                    
-                      
-                    }
-                 
-                    console.log("b="+Number(op.slice(prevOpInd+1,lastSliceInd).join('')))           
-                    prevOpInd=i
-                }
-                //provide if there is an infinite value
-                if((!isFinite(tmpresult)||isNaN(tmpresult)) && !firstTime){
-                    this.setState({displaying:"ERROR"})
-                    console.log(tmpresult+"tmp")
-                    break
-                }
-                if(i===op.length-1){
-                    this.setState({displaying:"="+tmpresult})
-                }
-           
-        }
-        console.log(tmpresult)
-     
-          
-     
+        let op=this.state.operation
+        // eslint-disable-next-line no-eval
+        op=eval(op.join(''))
+        this.setState({displaying:op})
     }
 
     delete(){
